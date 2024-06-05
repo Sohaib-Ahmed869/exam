@@ -6,13 +6,13 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Code') {
+        stage('21i-1114 Checkout Code') {
             steps {
                 git branch: 'master', url:'https://github.com/Sohaib-Ahmed869/exam.git'
             }
         }
 
-        stage('Build and Push Docker Images') {
+        stage('21i-1114 Build and Push Docker Images') {
             steps {
                 script {
                     // Login to Docker Hub

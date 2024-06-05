@@ -5,6 +5,8 @@ import qs from 'qs';
 
 import styles from './Posts.module.css';
 
+const backendUrl = process.env.REACT_APP_BACKEND_URL 
+
 const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [postTitle, setPostTitle] = useState("");
@@ -15,7 +17,7 @@ const Posts = () => {
 
   const createPost = async (e) => {
     e.preventDefault();
-    const res = await axios.post('http://localhost:4002/create_post', { classId, postTitle });
+    const res = await axios.post(backendUrl + '/create_post', { classId, postTitle });
     setPosts(res.data);
     setPostTitle("");
 
@@ -33,7 +35,7 @@ const Posts = () => {
     setComments(comments);
 
     // make add_comment axios request here
-    await axios.post('http://localhost:4002/add_comment', {
+    await axios.post(backendUrl + '/add_comment', {
       id: postId,
       class: classId,
       text: comments[postId]
@@ -80,7 +82,7 @@ const Posts = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await axios.get('http://localhost:4002/get_posts/' + classId);
+      const res = await axios.get(backendUrl+'/get_posts/' + classId);
       setPosts(res.data);
     };
     

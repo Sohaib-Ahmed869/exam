@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+  auth:
+    build: ./Auth
+    image: sohaibsipra/exam:auth-service
+    ports:
+      - "4000:3114"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/
+      - EVENT_SERVICE_URI=http://events:4009
+    depends_on:
+      - mongo
+  classrooms:
+    build: ./Classrooms
+    image: sohaibsipra/exam:classroom-service
+    ports:
+      - "4001:3114"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/
+      - EVENT_SERVICE_URI=http://events:4009
+    depends_on:
+      - mongo
+  events:
+    build: ./event-bus
+    image: sohaibsipra/exam:event-service
+    ports:
+      - "4002:3114"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/
+      - EVENT_SERVICE_URI=http://events:4009
+    depends_on:
+      - mongo
+    
+  post:
+    build: ./Post
+    image: sohaibsipra/exam:post-service
+    ports:
+      - "4003:3114"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/
+      - EVENT_SERVICE_URI=http://events:4009
+    depends_on:
+      - mongo
+
+  client:
+    build: ./client
+    image: sohaibsipra/exam:client
+    ports:
+      - "80:1114"  # Maps port 80 on the container to port 80 on the host
+    environment:
+      - REACT_APP_AUTH_URL=http://auth:4000
+      - REACT_APP_CLASSROOMS_URL=http://classrooms:4001
+      - REACT_APP_EVENTS_URL=http://events:4002
+      - REACT_APP_POSTS_URL=http://post:4003
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

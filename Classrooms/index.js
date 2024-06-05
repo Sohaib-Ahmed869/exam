@@ -11,7 +11,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
-var url = 'mongodb://localhost:27017/';
+var url = process.env.MONGO_URI
+const eventServiceUri = process.env.EVENT_SERVICE_URI
 
 app.post('/create_class', async (req, res) => {
     const classId = randomBytes(3).toString('hex');
@@ -41,7 +42,7 @@ app.post('/create_class', async (req, res) => {
         db.close();
     });
 
-    await axios.post('http://localhost:4009/events', {
+    await axios.post(`${eventServiceUri}/events`, {
         type: 'ClassCreated',
         data: classId
     });

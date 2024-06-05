@@ -26,11 +26,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            // Clean up Docker images and resources after building and pushing
-            sh 'docker-compose down --rmi all'
-        }
-    }
 }
